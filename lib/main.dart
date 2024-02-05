@@ -1,38 +1,42 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  File? image;
+
+  Future pickImage(ImageSource source) async{ //function that deals with selecting an image
+    final image = await ImagePicker().pickImage(source: source);
+    if (image ==null) return;
+    final imageTemporary = File(image.path);
+    this.image = imageTemporary;
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+     home: Scaffold(
+        appBar: AppBar(backgroundColor: Colors.black87, title: const Text("Climb Sorter (or something idk lol)")),
+        body: Column(
+          children: const[
+            FloatingActionButton.extended(onPressed: pickImage(ImageSource.camera), label: Text("From Camera"), icon:Icon(Icons.camera_alt_rounded)), //"From Camera" button 
+          ]
+        )
+     ),
+      );
   }
 }
 
