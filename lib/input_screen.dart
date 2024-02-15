@@ -46,8 +46,8 @@ class _InputScreenState extends State<InputScreen> {
             icon: const Icon(Icons.photo_album_rounded)
             ),
              
-            FloatingActionButton.extended(onPressed: (){//"From Camera" button
-              pickImage(ImageSource.camera); //call pickimage method to get image from gallery
+            FloatingActionButton.extended(onPressed: (){ //"From Camera" button
+              pickImage(ImageSource.camera); // call pickimage method to get image from gallery
             }, label: const Text("From Camera"), 
             icon: const Icon(Icons.camera_alt_rounded)
             ),
