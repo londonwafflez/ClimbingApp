@@ -62,11 +62,11 @@ class _InputScreenState extends State<InputScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children:[
-          SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.30,
+          SizedBox( // show the camera feed!
+            height: MediaQuery.sizeOf(context).height * 0.80, //resize the feed  to fit on the page
             width: MediaQuery.sizeOf(context).width * 0.80,
             child: CameraPreview(
-              cameraController!,
+              cameraController!, //this is the camera preview
             ),
           ),
           Row(children: [
@@ -91,9 +91,6 @@ class _InputScreenState extends State<InputScreen> {
               ),
             ],
           )
-          
-
-
         ]
       ),
     ),);
@@ -105,18 +102,7 @@ class _InputScreenState extends State<InputScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
      home: Scaffold(
-        body: _buildUI()
-        
-        
-        
-        /*Column(
-          children: [
-
-            
-             
-            
-          ]
-        )*/
+        body: _buildUI() // using a function because its easier to edit
      ),
       );
   }
