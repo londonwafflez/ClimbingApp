@@ -10,56 +10,89 @@ class AnalyzingScreen extends StatefulWidget {
   });
   
   @override
-  State<AnalyzingScreen> createState() => _AnalyzingScreenState();
+  State<AnalyzingScreen> createState() => AnalyzingScreenState();
 }
 
-class _AnalyzingScreenState extends State<AnalyzingScreen> {
+class AnalyzingScreenState extends State<AnalyzingScreen> {
+  Color appbarColor = Colors.blueGrey;
+
+  Color backgroundColor = Colors.grey.shade200;
+
+  Set<Color> swatches = Colors.primaries.map((e) => Color(e.value)).toSet();
+
+  final ValueNotifier<Color?> hoveredColor = ValueNotifier<Color?>(null);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            body: Column(
-                children: [
-                  Image.file(widget.img),
+    final textTheme = Theme.of(context).textTheme;
 
-                  FloatingActionButton.extended(
-                      onPressed: () { //"From Gallery" button
-                        Navigator.pop(context);
-                      },
-                      label: const Text("Back"),
-                      icon: const Icon(Icons.arrow_back)
-                  ),
-                ]
+    final bodyTextColor =
+    ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark
+        ? Colors.white70
+        : Colors.black87;
 
-            )
-        )
-    );
-    /*@override
-  Widget build(BuildContext context) {
-    Color backgroundColor = const Color.fromRGBO(66, 165, 245, 1.0);
-    Color color1 = const Color.fromRGBO(245, 100, 100, 1.0);
-    var swatches = const Color.fromRGBO(245, 100, 100, 1.0);
-    return EyeDrop(
-      child: Builder(
-        builder: (context) =>
-            Scaffold(
-              backgroundColor: backgroundColor,
-              body: Container(
-                child: ColorButton(
-                  key: Key('c1'),
-                  color: color1,
-                  config: ColorPickerConfig(),
-                  size: 32,
-                  elevation: 5,
-                  boxShape: BoxShape.rectangle,
-                  // default : circle
-                  swatches: swatches,
-                  onColorChanged: (value) => setState(() => color1 = value),
+    final appbarTextColor =
+    ThemeData.estimateBrightnessForColor(appbarColor) == Brightness.dark
+        ? Colors.white70
+        : Colors.black87;
+
+    Color color;
+
+    return EyeDrop(child:
+        Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          title: Text('Climb Filter',
+              style: textTheme.titleLarge?.copyWith(color: appbarTextColor)),
+          backgroundColor: appbarColor,
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(12),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Select the background & appbar colors',
+                  style: textTheme.titleLarge?.copyWith(color: bodyTextColor),
                 ),
-              ),
+                ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    backgroundColor,
+                    BlendMode.modulate,
+                  ),
+                  child: Image.file(widget.img),
+                ),
+                // Center(child: Image.file(widget.img)),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          EyedropperButton(
+                            onColor: (value) =>
+                                setState(() => backgroundColor = value),
+                            onColorChanged: (value) => hoveredColor.value = value,
+                          ),
+                          ValueListenableBuilder<Color?>(
+                            valueListenable: hoveredColor,
+                            builder: (context, value, _) => Container(
+                              color: value ?? Colors.transparent,
+                              width: 24,
+                              height: 24,
+                            ),
+                          )
+                          // Insert button for resetting color
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+          ),
+        ),
       ),
     );
-  }*/
   }
 }

@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:climbingapp/analyzing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cyclop/cyclop.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
@@ -101,9 +102,10 @@ class _InputScreenState extends State<InputScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     home: Scaffold(
-        body: _buildUI() // using a function because its easier to edit
-     ),
+     home:
+          Scaffold(
+          body: _buildUI() // using a function because its easier to edit
+        ),
       );
   }
 }
