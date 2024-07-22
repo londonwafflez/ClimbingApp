@@ -45,7 +45,6 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
   static img.Image _createMask(List<dynamic> args) { //create the mask for the image
     img.Image image = args[0]; // honestly i have no clue what chatgpt did with the parameters
     Color clr = args[1];
-    print("The color we're looking for is" + clr.toString());
     img.Image mask = img.copyResize(image, width: image.width, height: image.height); //ensure the mask is the same size as the image
     //mask = img.gaussianBlur(mask, radius: 3); //apply a blur
     for (int y = 0; y < mask.height; y++) { //iterate through every pixel in the image
@@ -56,15 +55,20 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
           mask.getPixel(x, y).g.toInt(),
           mask.getPixel(x, y).b.toInt(),
         );
-        if (pixelColor != clr) { //if the colors are different, set the pixel of the maskto blac
+        if (_isColorSimilar(pixelColor, clr)) { //if the colors are different, set the pixel of the maskto blac
           mask.setPixel(x, y, img.ColorRgb8(255, 255, 255));
         } else {
-          print(pixelColor.toString() + " is = to " + clr.toString() );
           mask.setPixel(x, y, img.ColorRgb8(0, 0, 0)); //if the colors are rthe same, set the pixel of the mask to white
         }
       }
     }
     return mask;
+  }
+
+  static bool _isColorSimilar(Color a, Color b, {int tolerance = 10}) {
+    return (a.red - b.red).abs() <= tolerance &&
+           (a.green - b.green).abs() <= tolerance &&
+           (a.blue - b.blue).abs() <= tolerance;
   }
 
   static img.Image _applyMask(List<dynamic> args) { //PROBLEM HERE
