@@ -33,7 +33,7 @@ class _InputScreenState extends State<InputScreen> {
         Navigator.push( //switch screens
           context,
           MaterialPageRoute(builder: (context)=> AnalyzingScreen(
-            img: image!
+            imge: image!
             )
           )
         );
@@ -83,7 +83,7 @@ class _InputScreenState extends State<InputScreen> {
               Navigator.push( //switch screens
                 context,
                 MaterialPageRoute(builder: (context)=> AnalyzingScreen(
-                  img: File(picture.path)
+                  imge: File(picture.path)
                   )
                 )
               );
