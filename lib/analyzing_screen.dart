@@ -55,10 +55,10 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
           mask.getPixel(x, y).g.toInt(),
           mask.getPixel(x, y).b.toInt(),
         );
-        if (_isColorSimilar(pixelColor, clr)) { //if the colors are different, set the pixel of the maskto blac
+        if (_isColorSimilar(pixelColor, clr)) { //if the colors are different, set the pixel of the mask to black
           mask.setPixel(x, y, img.ColorRgb8(255, 255, 255));
         } else {
-          mask.setPixel(x, y, img.ColorRgb8(0, 0, 0)); //if the colors are rthe same, set the pixel of the mask to white
+          mask.setPixel(x, y, img.ColorRgb8(0, 0, 0)); //if the colors are the same, set the pixel of the mask to white
         }
       }
     }
@@ -117,18 +117,31 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                   'Select the background & appbar colors',
                   style: textTheme.titleLarge?.copyWith(color: bodyTextColor),
                 ),
-                Expanded(
-                  child: ColorFiltered(
+                Stack( // Stack puts the images on top of each other
+                  children: [
+                    ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.black,
+                        BlendMode.modulate,
+                      ),
+                      child: SizedBox(
+                          height: MediaQuery.sizeOf(context).height * .8,
+                          width: MediaQuery.sizeOf(context).width * 1,
+                          child: Image.file(widget.imge)
+                      ),
+                    ),
+                    ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      backgroundColor,
-                      BlendMode.modulate,
+                        backgroundColor,
+                        BlendMode.modulate,
+                      ),
+                      child: SizedBox(
+                        height: MediaQuery.sizeOf(context).height * .75,
+                        width: MediaQuery.sizeOf(context).width * 1,
+                        child: Image.memory(img.encodePng(maskedImage)),
+                      ),
                     ),
-                    child: SizedBox(
-                      height: MediaQuery.sizeOf(context).height * 1,
-                      width: MediaQuery.sizeOf(context).width * 1,
-                      child: Image.memory(img.encodePng(maskedImage)),
-                    ),
-                  ),
+                  ],
                 ),
                 Expanded(
                   child: Row(
