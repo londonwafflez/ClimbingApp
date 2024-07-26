@@ -161,7 +161,13 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                               height: 24,
                             ),
                           ),
-                          // Insert button for resetting color
+                          FloatingActionButton.extended(
+                              onPressed: () { //"From Gallery" button
+                                Navigator.pop(context);
+                              },
+                              label: const Text("Back"),
+                              icon: const Icon(Icons.arrow_back)
+                          ), // Insert button for resetting color
                         ],
                       ),
                     ],
