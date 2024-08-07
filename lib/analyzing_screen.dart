@@ -117,29 +117,19 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                   'Select the background & appbar colors',
                   style: textTheme.titleLarge?.copyWith(color: bodyTextColor),
                 ),
-                Stack( // Stack puts the images on top of each other
+                Stack(
                   children: [
-                    ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.modulate,
-                      ),
-                      child: SizedBox(
-                          height: MediaQuery.sizeOf(context).height * .8,
-                          width: MediaQuery.sizeOf(context).width * 1,
-                          child: Image.file(widget.imge)
-                      ),
+                    // Original image
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .8,
+                      width: MediaQuery.sizeOf(context).width * 1,
+                      child: Image.file(widget.imge),
                     ),
-                    ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                        backgroundColor,
-                        BlendMode.modulate,
-                      ),
-                      child: SizedBox(
-                        height: MediaQuery.sizeOf(context).height * .75,
-                        width: MediaQuery.sizeOf(context).width * 1,
-                        child: Image.memory(img.encodePng(maskedImage)),
-                      ),
+                    // Masked image
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .75,
+                      width: MediaQuery.sizeOf(context).width * 1,
+                      child: Image.memory(img.encodePng(maskedImage)),
                     ),
                   ],
                 ),
