@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cyclop/cyclop.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/foundation.dart';
+import 'package:widget_mask/widget_mask.dart';
 
 class AnalyzingScreen extends StatefulWidget {
   final File imge;
@@ -71,7 +72,7 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
            (a.blue - b.blue).abs() <= tolerance;
   }
 
-  static img.Image _applyMask(List<dynamic> args) { //PROBLEM HERE
+  static img.Image _applyMask(List<dynamic> args) { 
     img.Image image = args[0];
     img.Image mask = args[1];
 
@@ -80,7 +81,9 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
       for (int x = 0; x < result.width; x++) {
         final pixelValue = mask.getPixel(x, y);
         if (pixelValue.r == 0 && pixelValue.g == 0 && pixelValue.b == 0) {
-          result.setPixelRgba(x, y, 255, 255, 255, 0);
+          //result.setPixelRgba(x, y, 255, 255, 255, 0);
+          result.setPixel(x, y, img.ColorRgba8(255, 255, 255, 0));
+          
         }
         
       }
@@ -119,8 +122,9 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                 ),
                 Stack(
                   children: [
+                    
                     // Original image
-                    SizedBox(
+                    /*SizedBox(
                       height: MediaQuery.sizeOf(context).height * .8,
                       width: MediaQuery.sizeOf(context).width * 1,
                       child: Image.file(widget.imge),
@@ -130,7 +134,14 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                       height: MediaQuery.sizeOf(context).height * .75,
                       width: MediaQuery.sizeOf(context).width * 1,
                       child: Image.memory(img.encodePng(maskedImage)),
-                    ),
+                    ),*/
+                    WidgetMask(
+                    // `BlendMode.difference` results in the negative of `dst` where `src`
+                    // is fully white. That is why the text is white.
+                    blendMode: BlendMode.colorBurn,
+                    mask: Image.memory(img.encodePng(maskedImage)),
+                    child: Image.file(widget.imge),
+                  )
                   ],
                 ),
                 Expanded(
