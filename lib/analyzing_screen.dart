@@ -28,6 +28,9 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
   late img.Image image;
   late img.Image maskedImage;
 
+  late BlendMode imageBlendMode = BlendMode.srcOver;
+  late Text origButtonText = Text("See Original");
+
   @override
   void initState() {
     super.initState();
@@ -83,9 +86,7 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
         if (pixelValue.r == 0 && pixelValue.g == 0 && pixelValue.b == 0) {
           //result.setPixelRgba(x, y, 255, 255, 255, 0);
           result.setPixel(x, y, img.ColorRgba8(255, 255, 255, 0));
-          
         }
-        
       }
     }
     return result;
@@ -122,23 +123,8 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                 ),
                 Stack(
                   children: [
-                    
-                    // Original image
-                    /*SizedBox(
-                      height: MediaQuery.sizeOf(context).height * .8,
-                      width: MediaQuery.sizeOf(context).width * 1,
-                      child: Image.file(widget.imge),
-                    ),
-                    // Masked image
-                    SizedBox(
-                      height: MediaQuery.sizeOf(context).height * .75,
-                      width: MediaQuery.sizeOf(context).width * 1,
-                      child: Image.memory(img.encodePng(maskedImage)),
-                    ),*/
                     WidgetMask(
-                    // `BlendMode.difference` results in the negative of `dst` where `src`
-                    // is fully white. That is why the text is white.
-                    blendMode: BlendMode.colorBurn,
+                    blendMode: imageBlendMode,
                     mask: Image.memory(img.encodePng(maskedImage)),
                     child: Image.file(widget.imge),
                   )
@@ -168,7 +154,22 @@ class AnalyzingScreenState extends State<AnalyzingScreen> {
                               },
                               label: const Text("Back"),
                               icon: const Icon(Icons.arrow_back)
-                          ), // Insert button for resetting color
+                          ),
+                          FloatingActionButton.extended(
+                            onPressed: () {
+                              print(origButtonText.data);
+                              print(origButtonText.data == "See Original");
+                              print(origButtonText);
+                              if (origButtonText.data == "See Original") {
+                                imageBlendMode = BlendMode.dstOver;
+                                origButtonText = const Text("See New");
+                              } else {
+                                imageBlendMode = BlendMode.modulate;
+                                origButtonText = const Text("See Original");
+                              }
+                            },
+                            label: origButtonText
+                          )
                         ],
                       ),
                     ],
